@@ -1,6 +1,9 @@
 package org.leanpoker.player;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 /**
  * Created by wissam on 09/04/16.
@@ -16,8 +19,18 @@ public class GameState {
     public String minimum_raise;
     public String dealer;
     public String orbits;
-    public JsonArray players;
+    public String in_action;
+    public Player[]  players;
     public JsonArray community_cards;
+
+    public String getIn_action() {
+        return in_action;
+    }
+
+    public void setIn_action(String in_action) {
+
+        this.in_action = in_action;
+    }
 
     public void setTournament_id(String tournament_id) {
         this.tournament_id = tournament_id;
@@ -59,11 +72,60 @@ public class GameState {
         this.orbits = orbits;
     }
 
-    public void setPlayers(JsonArray players) {
+    public String getTournament_id() {
+        return tournament_id;
+    }
+
+    public String getGame_id() {
+        return game_id;
+    }
+
+    public String getRound() {
+        return round;
+    }
+
+    public String getBet_index() {
+        return bet_index;
+    }
+
+    public String getSmall_blind() {
+        return small_blind;
+    }
+
+    public String getCurrent_buy_in() {
+        return current_buy_in;
+    }
+
+    public String getPot() {
+        return pot;
+    }
+
+    public String getMinimum_raise() {
+        return minimum_raise;
+    }
+
+    public String getDealer() {
+        return dealer;
+    }
+
+    public String getOrbits() {
+        return orbits;
+    }
+
+    public Player[] getPlayers() {
+        return players;
+    }
+
+    public JsonArray getCommunity_cards() {
+        return community_cards;
+    }
+
+    public void setPlayers(Player[] players) {
         this.players = players;
     }
 
     public void setCommunity_cards(JsonArray community_cards) {
         this.community_cards = community_cards;
     }
+
 }

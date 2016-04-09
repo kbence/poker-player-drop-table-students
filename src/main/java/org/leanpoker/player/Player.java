@@ -1,5 +1,6 @@
 package org.leanpoker.player;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -12,6 +13,15 @@ import java.util.Map;
 public class Player {
 
     static final String VERSION = "Default Java kick-ass player";
+
+
+    public String id;
+    public String Name;
+    public String status;
+    public String version;
+    public String stack;
+    public String bet;
+
 
     static class Card {
         String suit;
@@ -110,8 +120,8 @@ public class Player {
             Card[] cardsOnTable = getCommunityCards(request);
             Card[] hand = getOwnCards(cards);
 
-            int currentBet = request.getAsJsonObject().get("players").getAsJsonObject().get("bet").getAsInt();
-            int currentStack = request.getAsJsonObject().get("players").getAsJsonObject().get("stack").getAsInt();
+            int currentBet = player.get("bet").getAsInt();
+            int currentStack = player.get("stack").getAsInt();
             int minimumRaise = request.getAsJsonObject().get("minimum_raise").getAsInt();
             int currentBuyIn = request.getAsJsonObject().get("current_buy_in").getAsInt();
 
@@ -128,17 +138,84 @@ public class Player {
             }
 
             if (hand[0].rank.equals(hand[1].rank)) {
-                return Math.max(amountToRaise, amountToHold + currentStack / 10);
+                if (currentBet > currentStack / 2) {
+                    System.out.printf("Folding because currentBet (%d) > currentStack / 2 (%d)\n",
+                            currentBet, currentStack / 2);
+                    return 0;
+                }
+
+                int bet = Math.max(amountToRaise, amountToHold + currentStack / 10);
+                System.out.printf("Betting (%d) for pair\n", bet);
+                return bet;
             }
 
             if (getCardValue(hand[0]) + getCardValue(hand[1]) > 20) {
-                return Math.max(amountToRaise, amountToHold + currentStack / 15);
+                int bet = Math.max(amountToRaise, amountToHold + currentStack / 15);
+                System.out.printf("Betting (%d) for high card\n", bet);
+                return bet;
             }
-        } catch (Exception e) {}
+        } catch (Exception e) {
+            StackTraceElement[] stackTrace = e.getStackTrace();
+            System.out.printf("we got an exception: %s\n", e.toString());
+            for (StackTraceElement elem : stackTrace) {
+                System.out.printf("    %s\n", elem.toString());
+            }
+        }
 
+        System.out.println("Folding by default");
         return 0;
     }
 
     public static void showdown(JsonElement game) {
     }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        Name = name;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
+    public void setStack(String stack) {
+        this.stack = stack;
+    }
+
+    public void setBet(String bet) {
+        this.bet = bet;
+    }
+
+    public String getBet() {
+
+        return bet;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getName() {
+        return Name;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public String getStack() {
+        return stack;
+    }
+
 }
