@@ -111,8 +111,8 @@ public class Player {
             Card[] cardsOnTable = getCommunityCards(request);
             Card[] hand = getOwnCards(cards);
 
-            int currentBet = request.getAsJsonObject().get("players").getAsJsonObject().get("bet").getAsInt();
-            int currentStack = request.getAsJsonObject().get("players").getAsJsonObject().get("stack").getAsInt();
+            int currentBet = player.get("bet").getAsInt();
+            int currentStack = player.get("stack").getAsInt();
             int minimumRaise = request.getAsJsonObject().get("minimum_raise").getAsInt();
             int currentBuyIn = request.getAsJsonObject().get("current_buy_in").getAsInt();
 
