@@ -138,6 +138,12 @@ public class Player {
             }
 
             if (hand[0].rank.equals(hand[1].rank)) {
+                if (currentBet > currentStack / 3) {
+                    System.out.printf("Holding because currentBet (%d) > currentStack / 3 (%d)\n",
+                            currentBet, currentStack / 2);
+                    return amountToHold;
+                }
+
                 if (currentBet > currentStack / 2) {
                     System.out.printf("Folding because currentBet (%d) > currentStack / 2 (%d)\n",
                             currentBet, currentStack / 2);
@@ -145,13 +151,13 @@ public class Player {
                 }
 
                 int bet = Math.max(amountToRaise, amountToHold + currentStack / 10);
-                System.out.printf("Betting (%d) for pair\n", bet);
+                System.out.printf("Betting %d for pair\n", bet);
                 return bet;
             }
 
-            if (getCardValue(hand[0]) + getCardValue(hand[1]) > 20) {
+            if (hand[0].suit.equals(hand[1].suit) && getCardValue(hand[0]) + getCardValue(hand[1]) > 20) {
                 int bet = Math.max(amountToRaise, amountToHold + currentStack / 15);
-                System.out.printf("Betting (%d) for high card\n", bet);
+                System.out.printf("Betting %d for high card\n", bet);
                 return bet;
             }
         } catch (Exception e) {
