@@ -1,13 +1,11 @@
 package org.leanpoker.player;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 public class Player {
@@ -21,6 +19,8 @@ public class Player {
     public String version;
     public String stack;
     public String bet;
+
+    private static String sessionID;
 
 
     static class Card {
@@ -112,8 +112,14 @@ public class Player {
         return -1;
     }
 
+    private static void log(String format, Object... args) {
+        System.out.printf("%s %s\n", sessionID, String.format(format, args));
+    }
+
     public static int betRequest(JsonElement request) {
         try {
+            sessionID = request.getAsJsonObject().get("game_id").getAsString();
+
             int inAction = request.getAsJsonObject().get("in_action").getAsInt();
             JsonObject player = request.getAsJsonObject().get("players").getAsJsonArray().get(inAction).getAsJsonObject();
             JsonArray cards = player.get("hole_cards").getAsJsonArray();
@@ -158,20 +164,20 @@ public class Player {
                 double positionMult = 1 + position / 400.0f;
 
                 if (currentBet > ((positionMult / 2) * currentStack) / 3) {
-                    System.out.printf("Holding because currentBet (%d) > currentStack / 3 (%d)\n",
+                    log("Holding because currentBet (%d) > currentStack / 3 (%d)\n",
                             currentBet, currentStack / 2);
                     return amountToHold;
                 }
 
                 if (currentBet > ((positionMult - 1.0f) * currentStack) / 2) {
-                    System.out.printf("Folding because currentBet (%d) > currentStack / 2 (%d)\n",
+                    log("Folding because currentBet (%d) > currentStack / 2 (%d)\n",
                             currentBet, currentStack / 2);
                     return 0;
                 }
 
 
                 int bet = Math.max(amountToRaise, amountToHold + (int)((positionMult * currentStack) / 10));
-                System.out.printf("Betting %d for pair\n", bet);
+                log("Betting %d for pair\n", bet);
                 return bet;
             }
 
@@ -182,21 +188,21 @@ public class Player {
                     return 0;
                 }
 
-                System.out.printf("Betting %d for high card (%d %d)\n", bet, getCardValue(hand[0]), getCardValue(hand[1]));
+                log("Betting %d for high card (%d %d)\n", bet, getCardValue(hand[0]), getCardValue(hand[1]));
                 return bet;
             }
         } catch (Exception e) {
             StackTraceElement[] stackTrace = e.getStackTrace();
-            System.out.printf("we got an exception: %s\n", e.toString());
+            log("we got an exception: %s\n", e.toString());
             for (StackTraceElement elem : stackTrace) {
-                System.out.printf("    %s\n", elem.toString());
+                log("    %s\n", elem.toString());
             }
         }
 
-        System.out.println("Folding by default");
+        log("Folding by default");
         int randBet = 0;
         if(Math.random() < 0.1) randBet = Math.round(Math.round(Math.random() * 200));
-        System.out.printf("Folding by default (%d)\n", randBet);
+        log("Folding by default (%d)\n", randBet);
         return randBet;
     }
 
