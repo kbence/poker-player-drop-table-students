@@ -112,6 +112,10 @@ public class Player {
             if (hand[0].rank.equals(hand[1].rank)) {
                 return Math.max(amountToRaise, amountToHold + currentStack / 10);
             }
+
+            if (getCardValue(hand[0]) + getCardValue(hand[1]) > 20) {
+                return Math.max(amountToRaise, amountToHold + currentStack / 15);
+            }
         } catch (Exception e) {}
 
         return 0;
