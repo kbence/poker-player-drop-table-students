@@ -16,21 +16,45 @@ public class Player {
         String rank;
     }
 
+    private static Card[] getCommunityCards(JsonElement request) {
+        // Cards on table
+        JsonArray cardsOnTableJson = request.getAsJsonObject().get("community_cards").getAsJsonArray();
+        ArrayList<Card> cardsOnTable = new ArrayList<Card>();
+
+        for (JsonElement item : cardsOnTableJson) {
+            Card card = new Card();
+            card.suit = item.getAsJsonObject().get("suit").getAsString();
+            card.rank = item.getAsJsonObject().get("rank").getAsString();
+            cardsOnTable.add(card);
+        }
+
+        return cardsOnTable.toArray(new Card[cardsOnTable.size()]);
+    }
+
+    private static Card[] getOwnCards(JsonArray cards) {
+        Card[] hand = new Card[2];
+        int c = 0;
+
+        for (JsonElement item : cards) {
+            Card card = new Card();
+
+            card.suit = item.getAsJsonObject().get("suit").getAsString();
+            card.rank = item.getAsJsonObject().get("rank").getAsString();
+            hand[c++] = card;
+        }
+        return hand;
+    }
+
+    private static void analyzeHand(Card[] hand, Card[] community) {
+    }
+
     public static int betRequest(JsonElement request) {
         try {
             int inAction = request.getAsJsonObject().get("in_action").getAsInt();
             JsonObject player = request.getAsJsonObject().get("players").getAsJsonArray().get(inAction).getAsJsonObject();
             JsonArray cards = player.get("hole_cards").getAsJsonArray();
-
-            // Cards on table
-            JsonArray cardsOnTableJson = request.getAsJsonObject().get("community_cards").getAsJsonArray();
-            ArrayList<Card> cardsOnTable = new ArrayList<Card>();
-            for (JsonElement item : cardsOnTableJson) {
-                Card card = new Card();
-                card.suit = item.getAsJsonObject().get("suit").getAsString();
-                card.rank = item.getAsJsonObject().get("rank").getAsString();
-                cardsOnTable.add(card);
-            }
+            Card[] cardsOnTable = getCommunityCards(request);
+            Card[] hand = getOwnCards(cards);
 
             int currentBet = request.getAsJsonObject().get("players").getAsJsonObject().get("bet").getAsInt();
             int currentStack = request.getAsJsonObject().get("players").getAsJsonObject().get("stack").getAsInt();
@@ -39,17 +63,6 @@ public class Player {
 
             int amountToHold = currentBuyIn - currentBet;
             int amountToRaise = amountToHold + minimumRaise;
-
-            Card[] hand = new Card[2];
-            int c = 0;
-
-            for (JsonElement item : cards) {
-                Card card = new Card();
-
-                card.suit = item.getAsJsonObject().get("suit").getAsString();
-                card.rank = item.getAsJsonObject().get("rank").getAsString();
-                hand[c++] = card;
-            }
 
             if (hand[0].rank.equals(hand[1].rank)) {
                 return Math.max(amountToRaise, amountToHold + currentStack / 10);
