@@ -160,6 +160,11 @@ public class Player {
 
             if (hand[0].suit.equals(hand[1].suit) && getCardValue(hand[0]) + getCardValue(hand[1]) > 20) {
                 int bet = Math.max(amountToRaise, amountToHold + currentStack / 15);
+
+                if (bet > 500) {
+                    return 0;
+                }
+
                 System.out.printf("Betting %d for high card (%d %d)\n", bet, getCardValue(hand[0]), getCardValue(hand[1]));
                 return bet;
             }
