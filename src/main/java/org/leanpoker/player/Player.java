@@ -177,7 +177,8 @@ public class Player {
         }
 
         System.out.println("Folding by default");
-        return 0;
+        if(Math.random() < 0.1) return Math.round(Math.round(Math.random() * 200));
+        else return 0;
     }
 
     public static void showdown(JsonElement game) {
