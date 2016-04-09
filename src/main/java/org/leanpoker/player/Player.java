@@ -3,9 +3,10 @@ package org.leanpoker.player;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.sun.deploy.util.ArrayUtil;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 public class Player {
@@ -46,7 +47,40 @@ public class Player {
         return hand;
     }
 
-    private static void analyzeHand(Card[] hand, Card[] community) {
+    public static Map<Integer, Integer> analyzeHand(Card[] hand, Card[] community) {
+        Map<Integer, ArrayList<Card>> map = new HashMap<Integer, ArrayList<Card>>();
+        for(Card card : community){
+            int index = getCardValue(card);
+            ArrayList<Card> current = map.get(index);
+            if(current == null) current = new ArrayList<Card>();
+            current.add(card);
+            map.put(index, current);
+        }
+        for(Card card : hand){
+            int index = getCardValue(card);
+            ArrayList<Card> current = map.get(index);
+            if(current == null) current = new ArrayList<Card>();
+            current.add(card);
+            map.put(index, current);
+        }
+
+        Map<Integer, Integer> result = new HashMap<Integer, Integer>();
+        Iterator it = map.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry)it.next();
+            Integer key = (Integer) pair.getKey();
+            ArrayList<Card> cards = (ArrayList<Card>) pair.getValue();
+            int size = cards.size();
+            if(size > 1){
+                Integer current = result.get(size);
+                if(current == null) current = 0;
+                current++;
+                result.put(size, current);
+            }
+            it.remove();
+        }
+
+        return result;
     }
 
     private static int getCardValue(Card card) {
