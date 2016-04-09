@@ -126,7 +126,9 @@ public class Player {
             if (getCardValue(hand[0]) + getCardValue(hand[1]) > 20) {
                 return Math.max(amountToRaise, amountToHold + currentStack / 15);
             }
-        } catch (Exception e) {}
+        } catch (Exception e) {
+            System.out.printf("we got an exception: %s\n", e.getMessage());
+        }
 
         return 0;
     }
