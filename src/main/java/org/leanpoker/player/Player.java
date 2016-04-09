@@ -120,6 +120,10 @@ public class Player {
             int amountToRaise = amountToHold + minimumRaise;
 
             if (hand[0].rank.equals(hand[1].rank)) {
+                if (currentBet > currentStack / 2) {
+                    return 0;
+                }
+
                 return Math.max(amountToRaise, amountToHold + currentStack / 10);
             }
 
