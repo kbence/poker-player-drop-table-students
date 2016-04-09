@@ -137,7 +137,7 @@ public class Player {
                 position = 200 + analyzeResult[0].number * analyzeResult[0].rank + analyzeResult[1].number * analyzeResult[1].rank;
             }
 
-            if (hand[0].rank.equals(hand[1].rank)) {
+            if (position > 0) {
                 if (currentBet > currentStack / 3) {
                     System.out.printf("Holding because currentBet (%d) > currentStack / 3 (%d)\n",
                             currentBet, currentStack / 2);
@@ -150,7 +150,9 @@ public class Player {
                     return 0;
                 }
 
-                int bet = Math.max(amountToRaise, amountToHold + currentStack / 10);
+                double positionMult = 1 + position / 400.0f;
+
+                int bet = Math.max(amountToRaise, amountToHold + (int)((positionMult * currentStack) / 10));
                 System.out.printf("Betting %d for pair\n", bet);
                 return bet;
             }
