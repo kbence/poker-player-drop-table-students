@@ -1,5 +1,6 @@
 package org.leanpoker.player;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -12,6 +13,15 @@ import java.util.Map;
 public class Player {
 
     static final String VERSION = "Default Java kick-ass player";
+
+
+    public String id;
+    public String Name;
+    public String status;
+    public String version;
+    public String stack;
+    public String bet;
+
 
     static class Card {
         String suit;
@@ -123,4 +133,54 @@ public class Player {
 
     public static void showdown(JsonElement game) {
     }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        Name = name;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
+    public void setStack(String stack) {
+        this.stack = stack;
+    }
+
+    public void setBet(String bet) {
+        this.bet = bet;
+    }
+
+    public String getBet() {
+
+        return bet;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getName() {
+        return Name;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public String getStack() {
+        return stack;
+    }
+
 }
