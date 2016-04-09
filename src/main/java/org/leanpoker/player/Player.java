@@ -127,7 +127,9 @@ public class Player {
                 return Math.max(amountToRaise, amountToHold + currentStack / 15);
             }
         } catch (Exception e) {
-            System.out.printf("we got an exception: %s\n", e.toString());
+            StackTraceElement[] stackTrace = e.getStackTrace();
+            System.out.printf("we got an exception: %s %s %s\n", e.toString(),
+                    stackTrace[0].toString(), stackTrace[stackTrace.length-1].toString());
         }
 
         return 0;
