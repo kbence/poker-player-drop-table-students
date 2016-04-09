@@ -128,8 +128,10 @@ public class Player {
             }
         } catch (Exception e) {
             StackTraceElement[] stackTrace = e.getStackTrace();
-            System.out.printf("we got an exception: %s %s %s\n", e.toString(),
-                    stackTrace[0].toString(), stackTrace[stackTrace.length-1].toString());
+            System.out.printf("we got an exception: %s\n", e.toString());
+            for (StackTraceElement elem : stackTrace) {
+                System.out.printf("    %s\n", elem.toString());
+            }
         }
 
         return 0;
