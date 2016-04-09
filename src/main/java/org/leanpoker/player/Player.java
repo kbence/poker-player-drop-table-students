@@ -18,6 +18,11 @@ public class Player {
         String rank;
     }
 
+    static class PairLike {
+        Integer rank;
+        Integer number;
+    }
+
     private static Card[] getCommunityCards(JsonElement request) {
         // Cards on table
         JsonArray cardsOnTableJson = request.getAsJsonObject().get("community_cards").getAsJsonArray();
@@ -47,7 +52,7 @@ public class Player {
         return hand;
     }
 
-    public static Map<Integer, Integer> analyzeHand(Card[] hand, Card[] community) {
+    public static PairLike[] analyzeHand(Card[] hand, Card[] community) {
         Map<Integer, ArrayList<Card>> map = new HashMap<Integer, ArrayList<Card>>();
         for(Card card : community){
             int index = getCardValue(card);
@@ -64,23 +69,27 @@ public class Player {
             map.put(index, current);
         }
 
-        Map<Integer, Integer> result = new HashMap<Integer, Integer>();
-        Iterator it = map.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry pair = (Map.Entry)it.next();
-            Integer key = (Integer) pair.getKey();
-            ArrayList<Card> cards = (ArrayList<Card>) pair.getValue();
-            int size = cards.size();
-            if(size > 1){
-                Integer current = result.get(size);
-                if(current == null) current = 0;
-                current++;
-                result.put(size, current);
-            }
-            it.remove();
-        }
+        PairLike first = new PairLike();
+        first.rank = getCardValue(hand[0]);
+        first.number = map.get(first.rank).size();
+        if(hand[0].rank.equals(hand[1].rank)){
+            if(first.number > 1) return new PairLike[]{first};
+            else return new PairLike[]{};
+        }else {
+            PairLike second = new PairLike();
+            second.rank = getCardValue(hand[1]);
+            second.number = map.get(second.rank).size();
 
-        return result;
+            if (first.number <= 1 && second.number <= 1)
+                return new PairLike[]{};
+            else if (first.number > 1 && second.number > 1)
+                return new PairLike[]{first, second};
+            else if (first.number > 1) {
+                return new PairLike[]{first};
+            } else {
+                return new PairLike[]{second};
+            }
+        }
     }
 
     private static int getCardValue(Card card) {
@@ -108,6 +117,15 @@ public class Player {
 
             int amountToHold = currentBuyIn - currentBet;
             int amountToRaise = amountToHold + minimumRaise;
+
+            // Calc position
+            int position = 0;
+            PairLike[] analyzeResult = analyzeHand(hand, cardsOnTable);
+            if(analyzeResult.length == 1){
+                position = analyzeResult[0].number * analyzeResult[0].rank;
+            }else if(analyzeResult.length == 2){
+                position = analyzeResult[0].number * analyzeResult[0].rank + analyzeResult[1].number * analyzeResult[1].rank;
+            }
 
             if (hand[0].rank.equals(hand[1].rank)) {
                 return Math.max(amountToRaise, amountToHold + currentStack / 10);

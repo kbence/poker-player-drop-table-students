@@ -42,9 +42,9 @@ public class PlayerTest {
         community[1].suit = "diamonds";
         community[1].rank = "3";
 
-        Map<Integer, Integer> map = Player.analyzeHand(hand, community);
-        assertEquals(null, map.get(1));
-        assertEquals(null, map.get(3));
-        assertEquals(1, map.get(2).intValue());
+        Player.PairLike[] result = Player.analyzeHand(hand, community);
+        assertEquals(1, result.length);
+        assertEquals(2, result[0].number.intValue());
+        assertEquals(2, result[0].rank.intValue());
     }
 }
