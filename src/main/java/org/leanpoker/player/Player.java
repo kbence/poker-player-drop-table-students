@@ -133,8 +133,25 @@ public class Player {
             PairLike[] analyzeResult = analyzeHand(hand, cardsOnTable);
             if(analyzeResult.length == 1){
                 position = analyzeResult[0].number * analyzeResult[0].rank;
-            }else if(analyzeResult.length == 2){
-                position = 200 + analyzeResult[0].number * analyzeResult[0].rank + analyzeResult[1].number * analyzeResult[1].rank;
+            }else if(analyzeResult.length == 2) {
+                if (analyzeResult[0].number == 2 && analyzeResult[1].number == 2) {
+                    int pairRank = Math.max(analyzeResult[0].rank, analyzeResult[1].rank);
+                    if (pairRank > 10) {
+                        position = 200 + 2 * analyzeResult[0].rank + 2 * analyzeResult[1].rank;
+                    } else {
+                        position = 200 + (3 * pairRank);
+                    }
+                } else if(analyzeResult[0].number == 3 && analyzeResult[1].number == 3){
+                    int pairRank = Math.max(analyzeResult[0].rank, analyzeResult[1].rank);
+                    if (pairRank > 10) {
+                        position = 200 + 3 * analyzeResult[0].rank + 3 * analyzeResult[1].rank;
+                    } else {
+                        position = 250 + (3 * pairRank);
+                    }
+                }else{
+                    position = 200 + analyzeResult[0].number * analyzeResult[0].rank + analyzeResult[1].number * analyzeResult[1].rank;
+                }
+
             }
 
             if (position > 0) {
