@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class Player {
 
-    static final String VERSION = "Default Java kick-ass player";
+    static final String VERSION = "Not so default ass-kicking Java player";
 
 
     public String id;
