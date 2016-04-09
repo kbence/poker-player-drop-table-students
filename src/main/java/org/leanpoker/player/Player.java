@@ -102,7 +102,7 @@ public class Player {
         }
     }
 
-    private static int getCardValue(Card card) {
+    public static int getCardValue(Card card) {
         String[] values = new String[] {"2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"};
         for (int n = 0; n < values.length; n++) {
             if (card.rank.equals(values[n]))
@@ -134,7 +134,7 @@ public class Player {
             if(analyzeResult.length == 1){
                 position = analyzeResult[0].number * analyzeResult[0].rank;
             }else if(analyzeResult.length == 2){
-                position = analyzeResult[0].number * analyzeResult[0].rank + analyzeResult[1].number * analyzeResult[1].rank;
+                position = 200 + analyzeResult[0].number * analyzeResult[0].rank + analyzeResult[1].number * analyzeResult[1].rank;
             }
 
             if (hand[0].rank.equals(hand[1].rank)) {

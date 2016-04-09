@@ -47,4 +47,21 @@ public class PlayerTest {
         assertEquals(2, result[0].number.intValue());
         assertEquals(2, result[0].rank.intValue());
     }
+
+    @Test
+    public void testGetCardValue() throws Exception {
+        Card card = new Card();
+        card.suit = "diamonds";
+        card.rank = "2";
+        assertEquals(2, Player.getCardValue(card));
+
+        card.rank = "10";
+        assertEquals(10, Player.getCardValue(card));
+
+        card.rank = "J";
+        assertEquals(11, Player.getCardValue(card));
+
+        card.rank = "A";
+        assertEquals(14, Player.getCardValue(card));
+    }
 }
