@@ -121,14 +121,20 @@ public class Player {
 
             if (hand[0].rank.equals(hand[1].rank)) {
                 if (currentBet > currentStack / 2) {
+                    System.out.printf("Folding because currentBet (%d) > currentStack / 2 (%d)\n",
+                            currentBet, currentStack / 2);
                     return 0;
                 }
 
-                return Math.max(amountToRaise, amountToHold + currentStack / 10);
+                int bet = Math.max(amountToRaise, amountToHold + currentStack / 10);
+                System.out.printf("Betting (%d) for pair\n", bet);
+                return bet;
             }
 
             if (getCardValue(hand[0]) + getCardValue(hand[1]) > 20) {
-                return Math.max(amountToRaise, amountToHold + currentStack / 15);
+                int bet = Math.max(amountToRaise, amountToHold + currentStack / 15);
+                System.out.printf("Betting (%d) for high card\n", bet);
+                return bet;
             }
         } catch (Exception e) {
             StackTraceElement[] stackTrace = e.getStackTrace();
@@ -138,6 +144,7 @@ public class Player {
             }
         }
 
+        System.out.println("Folding by default");
         return 0;
     }
 
