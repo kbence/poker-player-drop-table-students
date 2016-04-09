@@ -138,19 +138,20 @@ public class Player {
             }
 
             if (position > 0) {
-                if (currentBet > currentStack / 3) {
+                double positionMult = 1 + position / 400.0f;
+
+                if (currentBet > ((positionMult / 2) * currentStack) / 3) {
                     System.out.printf("Holding because currentBet (%d) > currentStack / 3 (%d)\n",
                             currentBet, currentStack / 2);
                     return amountToHold;
                 }
 
-                if (currentBet > currentStack / 2) {
+                if (currentBet > ((positionMult - 1.0f) * currentStack) / 2) {
                     System.out.printf("Folding because currentBet (%d) > currentStack / 2 (%d)\n",
                             currentBet, currentStack / 2);
                     return 0;
                 }
 
-                double positionMult = 1 + position / 400.0f;
 
                 int bet = Math.max(amountToRaise, amountToHold + (int)((positionMult * currentStack) / 10));
                 System.out.printf("Betting %d for pair\n", bet);
