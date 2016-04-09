@@ -54,8 +54,6 @@ public class Player {
             if (hand[0].rank.equals(hand[1].rank)) {
                 return Math.max(amountToRaise, amountToHold + currentStack / 10);
             }
-
-            return amountToHold;
         } catch (Exception e) {}
 
         return 0;
