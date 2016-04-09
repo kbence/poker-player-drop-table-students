@@ -3,6 +3,7 @@ package org.leanpoker.player;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.sun.deploy.util.ArrayUtil;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -46,6 +47,16 @@ public class Player {
     }
 
     private static void analyzeHand(Card[] hand, Card[] community) {
+    }
+
+    private static int getCardValue(Card card) {
+        String[] values = new String[] {"2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"};
+        for (int n = 0; n < values.length; n++) {
+            if (card.rank.equals(values[n]))
+                return n + 2;
+        }
+
+        return -1;
     }
 
     public static int betRequest(JsonElement request) {
