@@ -46,7 +46,7 @@ public class Player {
             return amountToHold;
         } catch (Exception e) {}
 
-        return 1000;
+        return 0;
     }
 
     public static void showdown(JsonElement game) {
