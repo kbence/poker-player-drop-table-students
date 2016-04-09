@@ -33,6 +33,7 @@ public class Player {
             }
 
             int currentBet = request.getAsJsonObject().get("players").getAsJsonObject().get("bet").getAsInt();
+            int currentStack = request.getAsJsonObject().get("players").getAsJsonObject().get("stack").getAsInt();
             int minimumRaise = request.getAsJsonObject().get("minimum_raise").getAsInt();
             int currentBuyIn = request.getAsJsonObject().get("current_buy_in").getAsInt();
 
@@ -51,7 +52,7 @@ public class Player {
             }
 
             if (hand[0].rank.equals(hand[1].rank)) {
-                return amountToRaise;
+                return Math.max(amountToRaise, amountToHold + currentStack / 10);
             }
 
             return amountToHold;
